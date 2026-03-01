@@ -1,0 +1,96 @@
+version: '3.8'
+
+services:
+  # 1. MONGODB DATABASE SERVICE
+  mongodb:
+    image: mongo:latest
+    container_name: multivendor-mongodb
+    restart: always
+    # Persistent storage for MongoDB data
+    volumes:
+      - db_data:/data/db
+    networks:
+      - multivendor-net
+    # Highly recommended to set up user/password for the local instance
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: your_docker_user
+      MONGO_INITDB_ROOT_PASSWORD: your_docker_password
+
+  # 2. NODE/EXPRESS BACKEND API SERVICE
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: multivendor-backend
+    restart: always
+    # Map API port internally 
+    ports:
+      - "8000:8000"
+    # Persistent storage for file uploads
+    volumes:
+      - uploads_data:/app/backend/uploads
+    networks:
+      - multivendor-net
+    depends_on:
+      - mongodb
+    # Environment variables are DEFINED by Dokploy UI, NOT the local .env
+    # The keys below are placeholders for the Dokploy UI.
+    environment:
+      PORT: 8000
+      # **IMPORTANT:** Use the exact keys from your config/.env file
+      DB_URL: # Set this in Dokploy UI
+      JWT_SECRET_KEY: # Set this in Dokploy UI
+      JWT_EXPIRES: # Set this in Dokploy UI
+      ACTIVATION_SECRET: # Set this in Dokploy UI
+      SMPT_HOST: # Set this in Dokploy UI
+      SMPT_PORT: # Set this in Dokploy UI
+      SMPT_MAIL: # Set this in Dokploy UI
+      SMPT_PASSWORD: # Set this in Dokploy UI
+      STRIPE_API_KEY: # Set this in Dokploy UI
+      STRIPE_SECRET_KEY: # Set this in Dokploy UI
+      NODE_ENV: production # Set to production for deployment
+      CORS_ORIGIN: # Set this in Dokploy UI to your final domain (e.g., https://yourdomain.com)
+
+  # 3. SOCKET.IO REAL-TIME SERVICE
+  socket:
+    build:
+      context: ./socket
+      dockerfile: Dockerfile
+    container_name: multivendor-socket
+    restart: always
+    # Map Socket.io port internally
+    ports:
+      - "4000:4000"
+    networks:
+      - multivendor-net
+    depends_on:
+      - backend
+    environment:
+      CORS_ORIGIN: # Set this in Dokploy UI to your final domain
+
+  # 4. REACT FRONTEND SERVICE
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: multivendor-frontend
+    restart: always
+    # Map frontend port 
+    ports:
+      - "80:80"
+    networks:
+      - multivendor-net
+    # The frontend needs to know where the backend and socket are
+    environment:
+        REACT_APP_API_URL: https://vaback.lt-webdemolink.com
+        REACT_APP_SOCKET_URL: http://vasock.lt-webdemolink.com/
+
+# Define named volumes for persistent data
+volumes:
+  uploads_data:
+  db_data:
+
+# Define the network for inter-service communication
+networks:
+  multivendor-net:
+    driver: bridge

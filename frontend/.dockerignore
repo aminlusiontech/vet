@@ -1,0 +1,29 @@
+# Dependencies and caches – install fresh inside Docker
+node_modules
+**/node_modules
+.build
+.cache
+**/.cache
+
+# Build output – we build inside the image
+build
+dist
+.next
+out
+
+# Git and IDE
+.git
+.gitignore
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.log
+.DS_Store
+.idea
+.vscode
+
+# Tests and docs (not needed for production image)
+coverage
+*.md
+!README.md
