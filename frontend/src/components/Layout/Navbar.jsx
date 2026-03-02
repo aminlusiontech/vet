@@ -58,7 +58,7 @@ const Navbar = ({ active, items }) => {
                                 rel={linkTarget === "_blank" ? "noopener noreferrer" : undefined}
                                 className={linkClass}
                             >
-                                {item.title}
+                                {item.title} - push
                             </Link>
                         )}
                     </div>

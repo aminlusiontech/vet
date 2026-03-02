@@ -116,7 +116,7 @@ import AdminDashboardStaff from "./pages/AdminDashboardStaff";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
-// import AgeVerification from "./components/Layout/AgeVerification";
+import AgeVerification from "./components/Layout/AgeVerification";
 import { loadUser } from "./redux/actions/user";
 import { loadAdmin } from "./redux/actions/admin";
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -735,8 +735,10 @@ const App = () => {
     <ErrorBoundary>
       <BrowserRouter>
         <ScrollToTop />
-        {/* <AgeVerification /> */}
-        <NotificationProvider>{routes}</NotificationProvider>
+        <NotificationProvider>
+          <AgeVerification />
+          {routes}
+        </NotificationProvider>
         <ToastContainer
           position="bottom-center"
           autoClose={5000}
