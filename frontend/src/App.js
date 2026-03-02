@@ -7,7 +7,6 @@ import {
   Route,
   useLocation,
   Navigate,
-  HashRouter,
 } from "react-router-dom";
 import ProfileOverview from "./pages/profile/ProfileOverviewNew";
 import ProfileOrdersUnified from "./pages/profile/ProfileOrdersUnified";
@@ -734,7 +733,7 @@ const App = () => {
 
   return (
     <ErrorBoundary>
-      <HashRouter>
+      <BrowserRouter>
         <ScrollToTop />
         {/* <AgeVerification /> */}
         <NotificationProvider>{routes}</NotificationProvider>
@@ -750,7 +749,7 @@ const App = () => {
           pauseOnHover
           theme="dark"
         />
-      </HashRouter>
+      </BrowserRouter>
     </ErrorBoundary>
   );
 };
