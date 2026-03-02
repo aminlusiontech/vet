@@ -113,7 +113,7 @@ import {
   AdminInboxPage,
 } from "./routes/AdminRoutes";
 import AdminDashboardStaff from "./pages/AdminDashboardStaff";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
 import AgeVerification from "./components/Layout/AgeVerification";
@@ -153,40 +153,11 @@ const ScrollToTop = () => {
   return null;
 };
 
-const App = () => {
-  const [stripePromise, setStripePromise] = useState(null);
+const AppRoutes = () => {
+  const location = useLocation();
 
-  async function getStripeApikey() {
-    try {
-      const { data } = await axios.get(`${server}/payment/stripe/key`);
-      if (data?.publishableKey) {
-        setStripePromise(loadStripe(data.publishableKey));
-      } else {
-        setStripePromise(null);
-      }
-    } catch (error) {
-      console.warn(
-        "Stripe is not currently configured or reachable.",
-        error?.response?.data?.message || error.message,
-      );
-      setStripePromise(null);
-    }
-  }
-
-  useEffect(() => {
-    // Load user and admin data on app mount (only once)
-    Store.dispatch(loadUser());
-    // Try to load admin if adminToken exists (will fail silently if no token)
-    Store.dispatch(loadAdmin());
-    // Load global data
-    Store.dispatch(getAllProducts());
-    Store.dispatch(getAllEvents());
-    getStripeApikey();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Empty array ensures this only runs once on mount
-
-  const routes = (
-    <Routes>
+  return (
+    <Routes key={`${location.pathname}${location.search}`}>
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/sign-up" element={<SignupPage />} />
@@ -730,6 +701,39 @@ const App = () => {
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
+};
+
+const App = () => {
+  const [stripePromise, setStripePromise] = useState(null);
+
+  async function getStripeApikey() {
+    try {
+      const { data } = await axios.get(`${server}/payment/stripe/key`);
+      if (data?.publishableKey) {
+        setStripePromise(loadStripe(data.publishableKey));
+      } else {
+        setStripePromise(null);
+      }
+    } catch (error) {
+      console.warn(
+        "Stripe is not currently configured or reachable.",
+        error?.response?.data?.message || error.message,
+      );
+      setStripePromise(null);
+    }
+  }
+
+  useEffect(() => {
+    // Load user and admin data on app mount (only once)
+    Store.dispatch(loadUser());
+    // Try to load admin if adminToken exists (will fail silently if no token)
+    Store.dispatch(loadAdmin());
+    // Load global data
+    Store.dispatch(getAllProducts());
+    Store.dispatch(getAllEvents());
+    getStripeApikey();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Empty array ensures this only runs once on mount
 
   return (
     <ErrorBoundary>
@@ -737,7 +741,7 @@ const App = () => {
         <ScrollToTop />
         <NotificationProvider>
           <AgeVerification />
-          {routes}
+          <AppRoutes />
         </NotificationProvider>
         <ToastContainer
           position="bottom-center"
