@@ -741,41 +741,24 @@ const App = () => {
     <ErrorBoundary>
       <BrowserRouter>
         <ScrollToTop />
-        {/* <Routes
-      location={location}
-      key={`${location.pathname}${location.search}`}
-      > */}
-        {/* <Route path="/" element={<HomePage />} />
-        <Route path="/contact" element={<ContactPage />} /> */}
-
-        {/* </Routes> */}
-        <AppRoutes />
+        <NotificationProvider>
+          <AgeVerification />
+          <AppRoutes />
+        </NotificationProvider>
+        <ToastContainer
+          position="bottom-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
       </BrowserRouter>
     </ErrorBoundary>
   );
-
-  // return (
-  //   <ErrorBoundary>
-  //     <BrowserRouter>
-  //       <ScrollToTop />
-  //       <NotificationProvider>
-  //         <AgeVerification />
-  //         <AppRoutes />
-  //       </NotificationProvider>
-  //       <ToastContainer
-  //         position="bottom-center"
-  //         autoClose={5000}
-  //         hideProgressBar={false}
-  //         newestOnTop={false}
-  //         closeOnClick
-  //         rtl={false}
-  //         pauseOnFocusLoss
-  //         draggable
-  //         pauseOnHover
-  //         theme="dark"
-  //       />
-  //     </BrowserRouter>
-  //   </ErrorBoundary>
-  // );
 };
 export default App;
