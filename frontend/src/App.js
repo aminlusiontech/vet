@@ -133,9 +133,9 @@ import KlarnaCheckoutReturn from "./pages/KlarnaCheckoutReturn";
 import { NotificationProvider } from "./contexts/NotificationContext";
 import ErrorBoundary from "./components/Layout/ErrorBoundary";
 
-const AdminDashboardProducts = lazy(
-  () => import("./pages/AdminDashboardProducts"),
-);
+// const AdminDashboardProducts = lazy(
+//   () => import("./pages/AdminDashboardProducts"),
+// );
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -501,7 +501,7 @@ const AppRoutes = () => {
                 </div>
               }
             >
-              <AdminDashboardProducts />
+              {/* <AdminDashboardProducts /> */}
             </Suspense>
           </ProtectedAdminRoute>
         }
@@ -704,6 +704,8 @@ const AppRoutes = () => {
 };
 
 const App = () => {
+  // const location = useLocation();
+
   const [stripePromise, setStripePromise] = useState(null);
 
   async function getStripeApikey() {
@@ -739,24 +741,41 @@ const App = () => {
     <ErrorBoundary>
       <BrowserRouter>
         <ScrollToTop />
-        <NotificationProvider>
-          <AgeVerification />
-          <AppRoutes />
-        </NotificationProvider>
-        <ToastContainer
-          position="bottom-center"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="dark"
-        />
+        {/* <Routes
+      location={location}
+      key={`${location.pathname}${location.search}`}
+      > */}
+        {/* <Route path="/" element={<HomePage />} />
+        <Route path="/contact" element={<ContactPage />} /> */}
+
+        {/* </Routes> */}
+        <AppRoutes />
       </BrowserRouter>
     </ErrorBoundary>
   );
+
+  // return (
+  //   <ErrorBoundary>
+  //     <BrowserRouter>
+  //       <ScrollToTop />
+  //       <NotificationProvider>
+  //         <AgeVerification />
+  //         <AppRoutes />
+  //       </NotificationProvider>
+  //       <ToastContainer
+  //         position="bottom-center"
+  //         autoClose={5000}
+  //         hideProgressBar={false}
+  //         newestOnTop={false}
+  //         closeOnClick
+  //         rtl={false}
+  //         pauseOnFocusLoss
+  //         draggable
+  //         pauseOnHover
+  //         theme="dark"
+  //       />
+  //     </BrowserRouter>
+  //   </ErrorBoundary>
+  // );
 };
 export default App;
